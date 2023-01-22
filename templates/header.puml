@@ -3,15 +3,25 @@
 !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
 !include AWSPuml/AWSCommon.puml
 !include AWSPuml/Groups/all.puml
-!include AWSPuml/Compute/LambdaLambdaFunction.puml
-!include AWSPuml/General/Documents.puml
-!include AWSPuml/General/Multimedia.puml
-!include AWSPuml/General/Tapestorage.puml
-!include AWSPuml/General/User.puml
-!include AWSPuml/MediaServices/ElementalMediaConvert.puml
-!include AWSPuml/MachineLearning/Transcribe.puml
-!include AWSPuml/Storage/SimpleStorageService.puml
+!include AWSPuml/Compute/all.puml
+!include AWSPuml/General/all.puml
+!include AWSPuml/SecurityIdentityCompliance/all.puml
+!include AWSPuml/Storage/all.puml
+!include AWSPuml/NetworkingContentDelivery/all.puml
 
 ' define custom group for Amazon S3 bucket
 AWSGroupColoring(S3BucketGroup, #FFFFFF, AWS_COLOR_GREEN, plain)
-!define S3BucketGroup(g_alias, g_label="S3 bucket") AWSGroupEntity(g_alias, g_label, AWS_COLOR_GREEN, SimpleStorageService, S3BucketGroup)
+!define S3BucketGroup(g_alias, g_label="S3 Buckets") AWSGroupEntity(g_alias, g_label, AWS_COLOR_GREEN, SimpleStorageService, S3BucketGroup)
+' define custom group for IAM
+AWSGroupColoring(IAMGroup, #FFFFFF, AWS_COLOR_RED, plain)
+!define IAMGroup(g_alias, g_label="Identity Access Management (IAM)") AWSGroupEntity(g_alias, g_label, AWS_COLOR_RED, IdentityandAccessManagement, IAMGroup)
+
+' Groups are rectangles with a custom style using stereotype - need to hide
+hide stereotype
+skinparam linetype ortho
+skinparam rectangle {
+    BackgroundColor AWS_BG_COLOR
+    BorderColor transparent
+}
+
+AWSCloudGroup(cloud) {
