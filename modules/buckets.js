@@ -1,5 +1,6 @@
-const { appendFileSync } = require('fs');
-function graph(state) {
+import { appendFileSync } from 'fs';
+
+export function graphBuckets(state) {
   const records = state.resources.filter((r) => r.type === 'aws_s3_bucket');
   if (records.length > 0) {
     appendFileSync(
@@ -17,8 +18,8 @@ function graph(state) {
     appendFileSync(
       'output.puml',
       `
+\t\ts3 -[hidden]u-> iam
 \t}`,
     );
   }
 }
-module.exports = { graph };

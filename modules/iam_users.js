@@ -1,5 +1,6 @@
-const { appendFileSync } = require('fs');
-function graph(state) {
+import { appendFileSync } from 'fs';
+
+export function graphIamUsers(state) {
   const records = state.resources.filter((r) => r.type === 'aws_iam_user');
   if (records.length > 0) {
     appendFileSync(
@@ -21,4 +22,3 @@ function graph(state) {
     );
   }
 }
-module.exports = { graph };

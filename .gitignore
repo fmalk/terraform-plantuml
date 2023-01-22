@@ -24,6 +24,8 @@ terraform.tfstate
 
 # output files
 output.puml
+*.png
+*.svg
 
 # Ignore other
 *.swp
@@ -32,3 +34,4 @@ output.puml
 .idea
 .vscode/*
 .vscode
+plantuml.jar

@@ -1,8 +1,9 @@
 {
-  "name": "terraform-plantuml",
+  "name": "tfpuml",
   "version": "0.1.0",
   "description": "Generate PlantUML Images from a Terraform State file",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -13,6 +14,7 @@
   "author": "Fernando Piancastelli",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^5.2.0",
     "commander": "^10.0.0",
     "semver": "^7.3.8"
   },

@@ -1,9 +1,12 @@
-const { Command } = require('commander');
-const { satisfies } = require('semver');
-const { readFileSync, appendFileSync, unlinkSync } = require('fs');
-const { graph: graphIamUsers } = require('./modules/iam_users');
-const { graph: graphBuckets } = require('./modules/buckets');
-const { graph: graphVPC } = require('./modules/vpc');
+import { satisfies } from 'semver';
+import chalk from 'chalk';
+import { appendFileSync, readFileSync, unlinkSync } from 'fs';
+import { loadAWS, graphAWS } from './modules/aws.js';
+import { graphIamUsers } from './modules/iam_users.js';
+import { graphBuckets } from './modules/buckets.js';
+import { graphVPCs } from './modules/vpc.js';
+import { graphRegions } from './modules/regions.js';
+import { Command } from 'commander';
 
 const TF_VERSION_CHECK = '>= 1.3.0';
 
@@ -23,24 +26,41 @@ program
 
 program.parse();
 
+console.log(chalk.green('START'));
+
 const options = program.opts();
 const no_check = options.check;
-const state = JSON.parse(readFileSync('terraform.tfstate'));
+console.log(chalk.blue('READING ') + 'terraform.state' + ' file');
+let state;
+try {
+  state = JSON.parse(readFileSync('terraform.tfstate'));
+  console.log(chalk.blue('PARSE') + ' sucessful');
+} catch (e) {
+  console.error(chalk.red('ERROR ') + 'reading input file: ', e.message);
+  process.exit(9);
+}
 
-if (!no_check && !satisfies(state.terraform_version, TF_VERSION_CHECK))
-  program.error(`Terraform version must be ${TF_VERSION_CHECK}. Use the --no-check flag to override (and possible break parsing)`);
-
+if (!no_check && !satisfies(state.terraform_version, TF_VERSION_CHECK)) {
+  console.error(chalk.red('ERROR') + ` Terraform version must be ${TF_VERSION_CHECK}. Use the --no-check flag to override (and possible break parsing)`);
+  process.exit(9);
+}
 try {
   // ignore errors
   unlinkSync('output.puml');
 } catch (e) {}
 
 // header
+console.log(chalk.blue('WRITE') + ' header');
 appendFileSync('output.puml', readFileSync('templates/header.puml'));
 
-graphIamUsers(state);
-graphBuckets(state);
-graphVPC(state);
+const iterate = [graphIamUsers, graphBuckets, graphRegions, graphVPCs];
+iterate.forEach((fn) => {
+  console.log(chalk.blue('WRITE') + ' ' + fn.name);
+  fn(state);
+});
 
 // footer
+console.log(chalk.blue('WRITE') + ' footer');
 appendFileSync('output.puml', readFileSync('templates/end.puml'));
+
+console.log(chalk.green('END'));
