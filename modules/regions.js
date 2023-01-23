@@ -8,13 +8,19 @@ export function loadRegions(state, stack) {
     } else return null;
   });
   const unique = Array.from(new Set(records.filter((r) => !!r)));
+  unique.push('sa-east-1');
   unique.forEach((region, idx) => {
     stack.push({
       isGroup: true,
       title: `Region ${region}`,
       reference: 'RegionGroup',
-      id: `region_${idx}`,
+      id: region,
     });
     loadVPCs(state, stack, region);
+    stack.push({
+      endGroup: true,
+      hiddenArrow:
+        idx === 0 ? `${region.replace(/-/g, '_')} -[hidden]u-> iam` : `${region.replace(/-/g, '_')} -[hidden]r-> ${unique[idx - 1].replace(/-/g, '_')}`,
+    });
   });
 }
