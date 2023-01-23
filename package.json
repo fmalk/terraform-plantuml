@@ -11,6 +11,10 @@
     "Terraform",
     "PlantUML"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fmalk/terraform-plantuml.git"
+  },
   "author": "Fernando Piancastelli",
   "license": "MIT",
   "dependencies": {
