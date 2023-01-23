@@ -15,7 +15,11 @@ export function loadBucket(state, stack) {
     });
   });
   stack.push({
+    from: 's3',
+    to: 'iam',
+    arrow: '-[hidden]r->',
+  });
+  stack.push({
     endGroup: true,
-    hiddenArrow: 's3 -[hidden]r-> iam',
   });
 }

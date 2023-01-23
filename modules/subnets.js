@@ -1,4 +1,5 @@
 import { loadRDS } from './rds.js';
+import { loadNAT } from './nat.js';
 
 export function loadSubnets(state, stack, vpc_id) {
   const records = state.resources.filter((r) => r.type === 'aws_subnet' && r.instances[0].attributes.vpc_id === vpc_id);
@@ -21,6 +22,7 @@ export function loadSubnets(state, stack, vpc_id) {
             reference: s.attributes.map_public_ip_on_launch ? 'PublicSubnetGroup' : 'PrivateSubnetGroup',
             id: s.attributes.id,
           });
+          // DATABASES
           const sg_record = state.resources.filter(
             (r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === s.attributes.id),
           );
@@ -28,6 +30,10 @@ export function loadSubnets(state, stack, vpc_id) {
             const subnet_group = sg_record[0].instances[0].attributes.name;
             loadRDS(state, stack, subnet_group, s.attributes.id);
           }
+          // END DATABASES
+          // NAT
+          loadNAT(state, stack, s.attributes.id);
+          // END NAT
           stack.push({
             endGroup: true,
           });

@@ -18,10 +18,21 @@ export function loadRegions(state, stack) {
       id: region,
     });
     loadVPC(state, stack, region);
+    if (idx === 0) {
+      stack.push({
+        from: region,
+        to: 'iam',
+        arrow: '-[hidden]u->',
+      });
+    } else {
+      stack.push({
+        from: region,
+        to: filtered[idx - 1],
+        arrow: '-[hidden]r->',
+      });
+    }
     stack.push({
       endGroup: true,
-      hiddenArrow:
-        idx === 0 ? `${region.replace(/-/g, '_')} -[hidden]u-> iam` : `${region.replace(/-/g, '_')} -[hidden]r-> ${filtered[idx - 1].replace(/-/g, '_')}`,
     });
   });
 }
