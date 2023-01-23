@@ -1,11 +1,10 @@
 import { satisfies } from 'semver';
 import chalk from 'chalk';
 import { appendFileSync, readFileSync, unlinkSync } from 'fs';
-import { loadAWS, graphAWS } from './modules/aws.js';
-import { graphIamUsers } from './modules/iam_users.js';
-import { graphBuckets } from './modules/buckets.js';
-import { graphVPCs } from './modules/vpc.js';
-import { graphRegions } from './modules/regions.js';
+import { loadAWS } from './modules/aws.js';
+import { loadIamUsers } from './modules/iam_users.js';
+import { loadBuckets } from './modules/buckets.js';
+import { loadRegions } from './modules/regions.js';
 import { Command } from 'commander';
 
 const TF_VERSION_CHECK = '>= 1.3.0';
@@ -49,15 +48,19 @@ try {
   unlinkSync('output.puml');
 } catch (e) {}
 
+// Store as stack of blocks, init
+console.log(chalk.green('START') + ' stacking');
+const stack = [];
+loadAWS(state, stack);
+loadIamUsers(state, stack);
+loadBuckets(state, stack);
+loadRegions(state, stack);
+console.log(stack);
+console.log(chalk.green('END') + ' stacking');
+
 // header
 console.log(chalk.blue('WRITE') + ' header');
 appendFileSync('output.puml', readFileSync('templates/header.puml'));
-
-const iterate = [graphIamUsers, graphBuckets, graphRegions, graphVPCs];
-iterate.forEach((fn) => {
-  console.log(chalk.blue('WRITE') + ' ' + fn.name);
-  fn(state);
-});
 
 // footer
 console.log(chalk.blue('WRITE') + ' footer');

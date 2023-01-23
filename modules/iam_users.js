@@ -1,24 +1,19 @@
-import { appendFileSync } from 'fs';
-
-export function graphIamUsers(state) {
+export function loadIamUsers(state, stack) {
   const records = state.resources.filter((r) => r.type === 'aws_iam_user');
   if (records.length > 0) {
-    appendFileSync(
-      'output.puml',
-      `
-\tIAMGroup(iam) {`,
-    );
-    records.forEach((record, idx) => {
-      appendFileSync(
-        'output.puml',
-        `
-\t\trectangle "$UserIMG()\\n${record.instances[0].attributes.name}" as iam_user_${idx}`,
-      );
+    stack.push({
+      isGroup: true,
+      title: 'Identity Access Manager (IAM)',
+      reference: 'IAMGroup',
+      id: 'iam',
     });
-    appendFileSync(
-      'output.puml',
-      `
-\t}`,
-    );
+    records.forEach((r, idx) => {
+      stack.push({
+        isGroup: false,
+        title: r.instances[0].attributes.name,
+        reference: '$UserIMG()',
+        id: `iam_user_${idx}`,
+      });
+    });
   }
 }

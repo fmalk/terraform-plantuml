@@ -1,19 +1,8 @@
-import { appendFileSync } from 'fs';
-
-export function loadAWS(state, tree) {
-  if (!tree) tree = {};
-  tree.cloud = {
+export function loadAWS(state, stack) {
+  stack.push({
+    isGroup: true,
+    title: 'AWS',
+    reference: 'AWSCloudGroup',
     id: 'aws',
-    iam: {},
-    s3: {},
-    regions: [],
-  };
-}
-
-export function graphAWS(object) {
-  appendFileSync(
-    'output.puml',
-    `
-AWSCloudGroup(aws) {`,
-  );
+  });
 }

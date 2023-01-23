@@ -1,23 +1,14 @@
-import { appendFileSync } from 'fs';
+import { loadIGWs } from './igw.js';
 
-export function graphVPCs(state) {
-  const records = state.resources.filter((r) => r.type === 'aws_vpc');
-  if (records.length > 0) {
-    records.forEach((record, idx) => {
-      appendFileSync(
-        'output.puml',
-        `
-\t\tVPCGroup(vpc_${idx}, "VPC ${record.instances[0].attributes.tags.Name}") {
-\t\t\trectangle "$VPCInternetGatewayIMG()\\nteste${idx}" as igw_${idx}
-\t\t}
-`,
-      );
+export function loadVPCs(state, stack, region) {
+  const records = state.resources.filter((r) => r.type === 'aws_vpc' && r.instances[0].attributes.arn.indexOf(region) > 0);
+  records.forEach((r, idx) => {
+    stack.push({
+      isGroup: true,
+      title: `VPC ${r.instances[0].attributes.tags.Name || r.instances[0].attributes.id}`,
+      reference: 'VPCGroup',
+      id: `${region}_vpc_${idx}`,
     });
-    appendFileSync(
-      'output.puml',
-      `
-\t\tregion_0 -[hidden]u-> s3
-\t}`,
-    );
-  }
+    loadIGWs(state, stack, r.instances[0].attributes.id);
+  });
 }

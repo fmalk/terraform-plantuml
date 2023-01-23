@@ -1,25 +1,19 @@
-import { appendFileSync } from 'fs';
-
-export function graphBuckets(state) {
+export function loadBuckets(state, stack) {
   const records = state.resources.filter((r) => r.type === 'aws_s3_bucket');
   if (records.length > 0) {
-    appendFileSync(
-      'output.puml',
-      `
-\tS3BucketGroup(s3) {`,
-    );
-    records.forEach((record, idx) => {
-      appendFileSync(
-        'output.puml',
-        `
-\t\trectangle "$SimpleStorageServiceBucketIMG()\\n${record.instances[0].attributes.bucket}" as s3_${idx}`,
-      );
+    stack.push({
+      isGroup: true,
+      title: 'S3 Buckets',
+      reference: 'S3Group',
+      id: 's3',
     });
-    appendFileSync(
-      'output.puml',
-      `
-\t\ts3 -[hidden]u-> iam
-\t}`,
-    );
+    records.forEach((r, idx) => {
+      stack.push({
+        isGroup: false,
+        title: r.instances[0].attributes.bucket,
+        reference: '$SimpleStorageServiceBucketIMG()',
+        id: `s3_${idx}`,
+      });
+    });
   }
 }
