@@ -1,7 +1,7 @@
-import { loadIGWs } from './igw.js';
+import { loadIGW } from './igw.js';
 import { loadSubnets } from './subnets.js';
 
-export function loadVPCs(state, stack, region) {
+export function loadVPC(state, stack, region) {
   const records = state.resources.filter((r) => r.type === 'aws_vpc' && r.instances[0].attributes.arn.indexOf(region) > 0);
   records.forEach((r, idx) => {
     stack.push({
@@ -10,7 +10,7 @@ export function loadVPCs(state, stack, region) {
       reference: 'VPCGroup',
       id: r.instances[0].attributes.id,
     });
-    loadIGWs(state, stack, r.instances[0].attributes.id);
+    loadIGW(state, stack, r.instances[0].attributes.id);
     loadSubnets(state, stack, r.instances[0].attributes.id);
     stack.push({
       endGroup: true,

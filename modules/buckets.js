@@ -1,8 +1,8 @@
-export function loadBuckets(state, stack) {
+export function loadBucket(state, stack) {
   const records = state.resources.filter((r) => r.type === 'aws_s3_bucket');
   stack.push({
     isGroup: true,
-    title: 'S3 Buckets',
+    title: 'S3',
     reference: 'S3BucketGroup',
     id: 's3',
   });

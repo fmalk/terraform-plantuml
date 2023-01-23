@@ -3,6 +3,7 @@
 !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
 !include AWSPuml/AWSCommon.puml
 !include AWSPuml/Groups/all.puml
+!include AWSPuml/Database/all.puml
 !include AWSPuml/Compute/all.puml
 !include AWSPuml/General/all.puml
 !include AWSPuml/SecurityIdentityCompliance/all.puml
@@ -20,6 +21,6 @@ AWSGroupColoring(IAMGroup, #FFFFFF, AWS_COLOR_RED, plain)
 hide stereotype
 skinparam linetype ortho
 skinparam rectangle {
-    BackgroundColor AWS_BG_COLOR
+    BackgroundColor transparent
     BorderColor transparent
 }

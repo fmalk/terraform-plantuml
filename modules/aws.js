@@ -1,5 +1,5 @@
 import { loadIamUsers } from './iam_users.js';
-import { loadBuckets } from './buckets.js';
+import { loadBucket } from './buckets.js';
 import { loadRegions } from './regions.js';
 
 export function loadAWS(state, stack) {
@@ -10,7 +10,7 @@ export function loadAWS(state, stack) {
     id: 'aws',
   });
   loadIamUsers(state, stack);
-  loadBuckets(state, stack);
+  loadBucket(state, stack);
   loadRegions(state, stack);
   stack.push({
     endGroup: true,

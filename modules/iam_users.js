@@ -2,7 +2,7 @@ export function loadIamUsers(state, stack) {
   const records = state.resources.filter((r) => r.type === 'aws_iam_user');
   stack.push({
     isGroup: true,
-    title: 'Identity Access Manager (IAM)',
+    title: 'IAM',
     reference: 'IAMGroup',
     id: 'iam',
   });
