@@ -28,7 +28,7 @@ export function loadSubnets(state, stack, vpc_id) {
           );
           if (sg_record) {
             const subnet_group = sg_record[0].instances[0].attributes.name;
-            loadRDS(state, stack, subnet_group, s.attributes.id);
+            loadRDS(state, stack, subnet_group, s.attributes.id, az);
           }
           // END DATABASES
           // NAT
