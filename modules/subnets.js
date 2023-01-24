@@ -1,5 +1,6 @@
 import { loadRDS } from './rds.js';
 import { loadNAT } from './nat.js';
+import { loadEC2 } from './ec2.js';
 
 export function loadSubnets(state, stack, vpc_id) {
   const records = state.resources.filter((r) => r.type === 'aws_subnet' && r.instances[0].attributes.vpc_id === vpc_id);
@@ -17,24 +18,27 @@ export function loadSubnets(state, stack, vpc_id) {
       r.instances.forEach((s) => {
         if (s.attributes.availability_zone === az) {
           const is_public = searchIfPublicSubnet(state, s.attributes.id);
+          const subnet_id = s.attributes.id;
           stack.push({
             isGroup: true,
-            title: `Subnet ${s.attributes.tags.Name || s.attributes.id}\\n${s.attributes.cidr_block}`,
+            title: `Subnet ${s.attributes.tags.Name || subnet_id}\\n${s.attributes.cidr_block}`,
             reference: is_public ? 'PublicSubnetGroup' : 'PrivateSubnetGroup',
-            id: s.attributes.id,
+            id: subnet_id,
           });
           // DATABASES
           const sg_record = state.resources.filter(
-            (r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === s.attributes.id),
+            (r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === subnet_id),
           );
           if (sg_record && sg_record.length > 0) {
             const subnet_group = sg_record[0].instances[0].attributes.name;
-            loadRDS(state, stack, subnet_group, s.attributes.id, az);
+            loadRDS(state, stack, subnet_group, subnet_id, az);
           }
           // END DATABASES
           // NAT
-          loadNAT(state, stack, s.attributes.id);
+          loadNAT(state, stack, subnet_id);
           // END NAT
+          // EC2
+          loadEC2(state, stack, subnet_id);
           stack.push({
             endGroup: true,
           });
