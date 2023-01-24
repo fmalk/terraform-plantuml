@@ -16,17 +16,18 @@ export function loadSubnets(state, stack, vpc_id) {
     records.forEach((r, idx) => {
       r.instances.forEach((s) => {
         if (s.attributes.availability_zone === az) {
+          const is_public = searchIfPublicSubnet(state, s.attributes.id);
           stack.push({
             isGroup: true,
             title: `Subnet ${s.attributes.tags.Name || s.attributes.id}\\n${s.attributes.cidr_block}`,
-            reference: s.attributes.map_public_ip_on_launch ? 'PublicSubnetGroup' : 'PrivateSubnetGroup',
+            reference: is_public ? 'PublicSubnetGroup' : 'PrivateSubnetGroup',
             id: s.attributes.id,
           });
           // DATABASES
           const sg_record = state.resources.filter(
             (r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === s.attributes.id),
           );
-          if (sg_record) {
+          if (sg_record && sg_record.length > 0) {
             const subnet_group = sg_record[0].instances[0].attributes.name;
             loadRDS(state, stack, subnet_group, s.attributes.id, az);
           }
@@ -44,4 +45,31 @@ export function loadSubnets(state, stack, vpc_id) {
       endGroup: true,
     });
   });
+}
+
+/**
+ * A subnet can only be considered public if it has a Route Table connecting it to a IGW.
+ */
+function searchIfPublicSubnet(state, subnet_id) {
+  const records = Array.from(
+    new Set(
+      state.resources
+        .filter((r) => r.type === 'aws_route_table_association' && r.instances.some((i) => i.attributes.subnet_id === subnet_id))
+        .map((r) => r.instances.map((i) => i.attributes.route_table_id))
+        .flat(),
+    ),
+  );
+  for (const tid of records) {
+    // has every gateway id associated with this subnet
+    const igw = state.resources
+      .filter((r) => r.type === 'aws_route_table' && r.instances[0].attributes.id === tid)
+      .map((r) => r.instances[0].attributes.route[0].gateway_id)
+      .filter((id) => !!id);
+    for (const gid of igw) {
+      // if indeed there is an IGW with this id, this is a public subnet
+      const found = state.resources.filter((r) => r.type === 'aws_internet_gateway' && r.instances[0].attributes.id === gid);
+      if (found.length > 0) return true;
+    }
+  }
+  return false;
 }
