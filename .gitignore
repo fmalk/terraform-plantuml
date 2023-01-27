@@ -9,7 +9,7 @@ node_modules/**/*
 */**/.tfstate.*
 */**/terraform.tfstate
 */**/terraform.tfstate*
-terraform.tfstate
+terraform.tfstate2
 # local env vars
 *.tfvars
 # dont let lock.hck spill to TF Cloud, not needed there
@@ -34,4 +34,4 @@ output.puml
 .idea
 .vscode/*
 .vscode
-plantuml.jar
+plantuml.jar2

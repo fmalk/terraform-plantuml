@@ -1,4 +1,4 @@
-@startuml Terraform State Graph
+@startuml
 
 !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
 !include AWSPuml/AWSCommon.puml

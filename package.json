@@ -7,9 +7,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "tfpuml": "index.js",
+    "tfpuml-download-plantuml": "download.js"
+  },
   "keywords": [
     "Terraform",
-    "PlantUML"
+    "PlantUML",
+    "AWS"
   ],
   "repository": {
     "type": "git",
@@ -20,6 +25,7 @@
   "dependencies": {
     "chalk": "^5.2.0",
     "commander": "^10.0.0",
+    "request": "^2.88.2",
     "semver": "^7.3.8"
   },
   "devDependencies": {
