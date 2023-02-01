@@ -19,15 +19,19 @@ export function loadSubnets(state, stack, vpc_id) {
         if (s.attributes.availability_zone === az) {
           const is_public = searchIfPublicSubnet(state, s.attributes.id);
           const subnet_id = s.attributes.id;
+          let title = subnet_id;
+          if (s.attributes.tags && s.attributes.tags.Name) title = s.attributes.tags.Name;
           stack.push({
             isGroup: true,
-            title: `Subnet ${s.attributes.tags.Name || subnet_id}\\n${s.attributes.cidr_block}`,
+            title: `${is_public ? 'Pub' : 'Pvt'} Subnet ${title}\\n${s.attributes.cidr_block}`,
             reference: is_public ? 'PublicSubnetGroup' : 'PrivateSubnetGroup',
             id: subnet_id,
           });
           // DATABASES
           const sg_record = state.resources.filter(
-            (r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === subnet_id),
+            (r) =>
+              r.type === 'aws_db_subnet_group' &&
+              r.instances[0].attributes.subnet_ids.some((sgid) => sgid === subnet_id),
           );
           if (sg_record && sg_record.length > 0) {
             const subnet_group = sg_record[0].instances[0].attributes.name;
@@ -58,7 +62,10 @@ function searchIfPublicSubnet(state, subnet_id) {
   const records = Array.from(
     new Set(
       state.resources
-        .filter((r) => r.type === 'aws_route_table_association' && r.instances.some((i) => i.attributes.subnet_id === subnet_id))
+        .filter(
+          (r) =>
+            r.type === 'aws_route_table_association' && r.instances.some((i) => i.attributes.subnet_id === subnet_id),
+        )
         .map((r) => r.instances.map((i) => i.attributes.route_table_id))
         .flat(),
     ),
@@ -71,7 +78,9 @@ function searchIfPublicSubnet(state, subnet_id) {
       .filter((id) => !!id);
     for (const gid of igw) {
       // if indeed there is an IGW with this id, this is a public subnet
-      const found = state.resources.filter((r) => r.type === 'aws_internet_gateway' && r.instances[0].attributes.id === gid);
+      const found = state.resources.filter(
+        (r) => r.type === 'aws_internet_gateway' && r.instances[0].attributes.id === gid,
+      );
       if (found.length > 0) return true;
     }
   }

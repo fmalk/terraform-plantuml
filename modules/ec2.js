@@ -8,9 +8,11 @@ export function loadEC2(state, stack, subnet_id) {
   records.forEach((atts) => {
     const family = atts.instance_type.substr(0, atts.instance_type.indexOf('.')).toUpperCase();
     const reference = `EC2${family}InstanceIMG`;
+    let title = s.id;
+    if (atts.tags && atts.tags.Name) title = atts.tags.Name;
     stack.push({
       isGroup: false,
-      title: `${atts.tags.Name || s.id}\\n${atts.instance_type}\\n${atts.private_ip}\\n${atts.public_ip}`,
+      title: `${title}\\n${atts.instance_type}\\n${atts.private_ip}\\n${atts.public_ip}`,
       reference,
       id: atts.id,
     });

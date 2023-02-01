@@ -69,8 +69,8 @@ export default async function runner(input, output, options) {
   // render image
   if (options.image) {
     await render(output);
-    console.log(chalk.green('END'));
+    console.log(chalk.green('END text & image output'));
   } else {
-    console.log(chalk.green('END no image'));
+    console.log(chalk.green('END text-only output'));
   }
 }

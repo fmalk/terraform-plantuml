@@ -8,7 +8,7 @@ export function loadRegions(state, stack) {
     } else return null;
   });
   const unique = new Set(records.filter((r) => !!r));
-  unique.add('us-east-1'); // standard, always show
+  // unique.add('us-east-1'); // standard, always show
   const filtered = Array.from(unique);
   filtered.forEach((region, idx) => {
     stack.push({
@@ -18,13 +18,7 @@ export function loadRegions(state, stack) {
       id: region,
     });
     loadVPC(state, stack, region);
-    if (idx === 0) {
-      stack.push({
-        from: region,
-        to: 'iam',
-        arrow: '-[hidden]u->',
-      });
-    } else {
+    if (idx > 0) {
       stack.push({
         from: region,
         to: filtered[idx - 1],
