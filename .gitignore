@@ -24,7 +24,6 @@ terraform.tfstate2
 
 # output files
 output.puml
-*.png
 *.svg
 
 # Ignore other
