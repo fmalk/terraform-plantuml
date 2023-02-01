@@ -2,6 +2,8 @@
 
 Generate PlantUML Images from a Terraform State file.
 
+![futurice_terraform_examples_aws_vpc_msk.png](gallery%2Ffuturice_terraform_examples_aws_vpc_msk.png)
+
 # Considerations:
 
 Take precautions when using State files (as they are open JSON files, most likely with secrets).
