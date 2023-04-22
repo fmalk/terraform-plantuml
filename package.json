@@ -1,6 +1,6 @@
 {
   "name": "tfpuml",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Generate PlantUML Images from a Terraform State file",
   "main": "index.js",
   "type": "module",
@@ -20,7 +20,7 @@
     "type": "git",
     "url": "git@github.com:fmalk/terraform-plantuml.git"
   },
-  "author": "Fernando Piancastelli",
+  "author": "Fernando Piancastelli <fernando@cellide.com>",
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.2.0",

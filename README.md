@@ -15,8 +15,7 @@ Safest way to generate a valid TF State file is to run `terraform init, plan & a
 # Steps
 
 - Install `npm i -g tfpuml`
-  - (Alpha) Not published to npm yet, so clone this repo, and run `npm link` from root
-- Download a `plantuml.jar` from official sources
+- Download a **PlantUML JAR** from official sources ([Releases](https://github.com/plantuml/plantuml/releases))
   - This packages comes with a script `tfpuml-download-plantuml`, run it to download a copy into this package folder 
   - Some IDEs are able to visualize PlantUML `.puml` files using plugins
 - Copy your TF state file to this folder root as `terraform.tfstate`
