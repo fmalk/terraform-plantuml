@@ -44,10 +44,15 @@ See `tfpuml --help` for further options
     - VPCs
       - AZs
       - Subnets
+        - CIDR Blocks
+        - NATs
+        - IGWs
+  - EC2
+  - ECS (partial)
+    - Cluster
   - RDS (partial)
-  - EC2 (partial)
-  - ECS (coming next)
 
 # Roadmap
 
-- More common resources supported
+- ECS Services & Tasks positioned at their subnets
+- Lambdas
