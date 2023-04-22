@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 const download = async function (url) {
   const file = fs.createWriteStream(__dirname + '/plantuml.jar');
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     request(url).pipe(file).on('close', resolve);
   });
 };

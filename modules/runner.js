@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { appendFileSync, readFileSync, unlinkSync } from 'fs';
 import { satisfies } from 'semver';
-import { loadAWS } from './modules/aws.js';
+import { loadAWS } from './aws/aws.js';
 import { parse } from './parser.js';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -51,7 +51,7 @@ export default async function runner(input, output, options) {
 
   // header
   console.time(chalk.blue('WRITE') + ' header');
-  const headerPath = path.resolve(__dirname + '/templates/header.puml');
+  const headerPath = path.resolve(__dirname + '/../templates/header.puml');
   appendFileSync(output, readFileSync(headerPath));
   console.timeEnd(chalk.blue('WRITE') + ' header');
 
@@ -62,7 +62,7 @@ export default async function runner(input, output, options) {
 
   // footer
   console.time(chalk.blue('WRITE') + ' footer');
-  const endPath = path.resolve(__dirname + '/templates/end.puml');
+  const endPath = path.resolve(__dirname + '/../templates/end.puml');
   appendFileSync(output, readFileSync(endPath));
   console.timeEnd(chalk.blue('WRITE') + ' footer');
 

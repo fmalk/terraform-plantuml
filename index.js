@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { program } from 'commander';
-import runner from './runner.js';
+import runner from './modules/runner.js';
 import chalk from 'chalk';
 
 const __filename = fileURLToPath(import.meta.url);

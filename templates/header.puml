@@ -3,6 +3,7 @@
 !define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
 !include AWSPuml/AWSCommon.puml
 !include AWSPuml/Groups/all.puml
+!include AWSPuml/Containers/all.puml
 !include AWSPuml/Database/all.puml
 !include AWSPuml/Compute/all.puml
 !include AWSPuml/General/all.puml
