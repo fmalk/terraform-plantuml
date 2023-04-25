@@ -3,7 +3,7 @@ import { loadNAT } from './nat.js';
 import { loadEC2 } from './ec2.js';
 import { attrSearch, nameSearch } from '../helpers.js';
 
-export function loadSubnets(state, stack, vpc_id) {
+export function loadSubnets(state, stack, igws, vpc_id) {
   const subnets = attrSearch(state, 'aws_subnet', 'vpc_id', vpc_id);
   const azs = subnets.map((i) => i.availability_zone);
   const unique_azs = Array.from(new Set(azs));
@@ -18,35 +18,39 @@ export function loadSubnets(state, stack, vpc_id) {
     });
     subnets.forEach((s) => {
       if (s.availability_zone !== az) return;
-      const is_public = searchIfPublicSubnet(state, s.id);
-      const subnet_id = nameSearch(s);
+      const is_public = searchIfPublicSubnet(state, igws, s.id);
+      const subnet_name = nameSearch(s);
       const subnetReference = {
         isGroup: true,
-        title: `${is_public ? 'Pub' : 'Pvt'} Subnet ${subnet_id}\\n${s.cidr_block}`,
+        title: `${is_public ? 'Pub' : 'Pvt'} Subnet\\n${subnet_name}\\n${s.cidr_block}`,
         reference: is_public ? 'PublicSubnetGroup' : 'PrivateSubnetGroup',
-        id: subnet_id,
+        id: s.id,
       };
       stack.push(subnetReference);
+      // arrows to IGW
+      if (is_public) {
+        igws.forEach((igw) => {
+          stack.push({
+            from: s.id,
+            to: igw,
+            arrow: '..[#1E8900]>',
+          });
+        });
+      }
       // DATABASES
       const sg_record = state.resources.filter(
-        (r) =>
-          r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === subnet_id),
+        (r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === s.id),
       );
       if (sg_record && sg_record.length > 0) {
         const subnet_group = sg_record[0].instances[0].attributes.name;
-        loadRDS(state, stack, subnet_group, subnet_id, az);
+        loadRDS(state, stack, subnet_group, s.id, az);
       }
       // END DATABASES
       // NAT
-      const hasPublicNAT = loadNAT(state, stack, subnet_id);
-      if (hasPublicNAT) {
-        // make sure it is a public subnet
-        subnetReference.reference = 'PublicSubnetGroup';
-        subnetReference.title = 'Pub' + subnetReference.title.substring(3);
-      }
+      loadNAT(state, stack, s.id);
       // END NAT
       // EC2
-      loadEC2(state, stack, subnet_id);
+      loadEC2(state, stack, s.id);
       stack.push({
         endGroup: true, // end subnet
       });
@@ -61,31 +65,18 @@ export function loadSubnets(state, stack, vpc_id) {
  * A subnet can be considered public if it has a Public NAT Gateway or a Route Table connecting it to a IGW.
  * It could be a Route Table or a direct Route.
  */
-function searchIfPublicSubnet(state, subnet_id) {
-  const records = Array.from(
-    new Set(
-      state.resources
-        .filter(
-          (r) =>
-            r.type === 'aws_route_table_association' && r.instances.some((i) => i.attributes.subnet_id === subnet_id),
-        )
-        .map((r) => r.instances.map((i) => i.attributes.route_table_id))
-        .flat(),
-    ),
-  );
-  for (const tid of records) {
-    // has every gateway id associated with this subnet
-    const igw = state.resources
-      .filter((r) => r.type === 'aws_route_table' && r.instances[0].attributes.id === tid)
-      .map((r) => r.instances[0].attributes.route[0].gateway_id)
-      .filter((id) => !!id);
-    for (const gid of igw) {
-      // if indeed there is an IGW with this id, this is a public subnet
-      const found = state.resources.filter(
-        (r) => r.type === 'aws_internet_gateway' && r.instances[0].attributes.id === gid,
-      );
-      if (found.length > 0) return true;
+function searchIfPublicSubnet(state, igws, subnet_id) {
+  // route to IGW
+  for (const igw of igws) {
+    const routes = attrSearch(state, 'aws_route', 'gateway_id', igw);
+    for (const route of routes) {
+      const associations = attrSearch(state, 'aws_route_table_association', 'route_table_id', route.route_table_id);
+      const foundPublicAssoc = associations.some((a) => a.subnet_id === subnet_id);
+      if (foundPublicAssoc) return true;
     }
   }
+
+  // FIXME: route table by searching route[]
+
   return false;
 }

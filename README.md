@@ -4,6 +4,8 @@ Generate PlantUML Images from a Terraform State file.
 
 ![futurice_terraform_examples_aws_vpc_msk.png](gallery%2Ffuturice_terraform_examples_aws_vpc_msk.png)
 
+See [Examples](/examples) for Terraform samples and their image outputs.
+
 # Considerations:
 
 Take precautions when using State files (as they are open JSON files, most likely with secrets).
@@ -18,11 +20,12 @@ Safest way to generate a valid TF State file is to run `terraform init, plan & a
 - Download a **PlantUML JAR** from official sources ([Releases](https://github.com/plantuml/plantuml/releases))
   - This packages comes with a script `tfpuml-download-plantuml`, run it to download a copy into this package folder 
   - Some IDEs are able to visualize PlantUML `.puml` files using plugins
-- Copy your TF state file to this folder root as `terraform.tfstate`
-- Run `tfpuml`
+- Copy your TF state file, it is usually named `terraform.tfstate`
+- Run `tfpuml` where your TF state file resides
   - Output: `output.puml`
-- Run `java -jar plantuml.jar output.puml`
-  - Output: `Terraform Stage Graph.png`
+- Run `tfpuml --image` to run and export a PNG diagram
+  - Or, run `java -jar plantuml.jar output.puml` using the PUML file from previous step
+  - Output: `output.png`
 
 
 ## Options
@@ -43,15 +46,24 @@ See `tfpuml --help` for further options
     - VPCs
       - AZs
       - Subnets
-        - CIDR Blocks
-        - NATs
-        - IGWs
+      - Gateways like IGWs, NATs, and others
   - EC2
   - ECS (partial)
     - Cluster
   - RDS (partial)
 
+# Limitations
+
+Since we're using PlantUML as both input and visualization, it doesn't support intersecting groups - it is a limitation of [GraphViz](https://stackoverflow.com/questions/49241869/graphviz-intersecting-but-non-recursive-clusters/62467700) and not really incentivized by PlantUML (or C4 Model) design. For this project it means groups that usually intersect with AZs like Security Groups, Beanstalk or Clusters have to rely on some group repetition. 
+
+To avoid cluttering the diagram, some AWS resources are intentionally left out, like Security Groups, IAM policies/roles and CloudWatch Logs.
+
 # Roadmap
 
 - ECS Services & Tasks positioned at their subnets
 - Lambdas
+- Examples from `terraform-aws-modules`
+
+## Acknowledgements
+
+- [AWS Icons for PlantUML](https://github.com/awslabs/aws-icons-for-plantuml) - This project is really a tool built on top of it - only possible because of their amazing job.

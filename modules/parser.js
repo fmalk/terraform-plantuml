@@ -8,12 +8,12 @@ export function parse(stack) {
       tabs--;
       line = ''.padStart(tabs * 2, '  ') + '}';
     } else if (s.isGroup) {
-      line = ''.padStart(tabs * 2, '  ') + `${s.reference}(${s.id.replace(/-/g, '_')}, "${s.title}") {`;
+      line = ''.padStart(tabs * 2, '  ') + `${s.reference}("${s.id.replace(/[-\s]/g, '_')}", "${s.title}") {`;
       tabs++;
     } else if (s.arrow) {
-      line = ''.padStart(tabs * 2, '  ') + `${s.from.replace(/-/g, '_')} ${s.arrow} ${s.to.replace(/-/g, '_')}`;
+      line = ''.padStart(tabs * 2, '  ') + `${s.from.replace(/[-\s]/g, '_')} ${s.arrow} ${s.to.replace(/[-\s]/g, '_')}`;
     } else {
-      line = ''.padStart(tabs * 2, '  ') + `rectangle "$${s.reference}()\\n${s.title}" as ${s.id.replace(/-/g, '_')}`;
+      line = ''.padStart(tabs * 2, '  ') + `rectangle "$${s.reference}()\\n${s.title}" as ${s.id.replace(/[-\s]/g, '_')}`;
     }
     appendFileSync(
       'output.puml',

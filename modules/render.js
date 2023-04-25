@@ -12,10 +12,11 @@ export default async function render(input) {
     setTimeout(() => console.log(chalk.magenta('RENDER') + ' this might take a while, please wait...'), 4000),
     setTimeout(() => console.log(chalk.magenta('RENDER') + ' still at work...'), 12000),
     setTimeout(() => console.log(chalk.magenta('RENDER') + ' sometimes it takes longer than a minute...'), 30000),
+    setTimeout(() => console.log(chalk.magenta('RENDER') + ' normal to take this long sometimes...'), 90000),
   ];
   console.time(chalk.magenta('RENDER') + ' done');
   return new Promise((resolve, reject) => {
-    exec(`java -jar ${__dirname}\\..\\plantuml.jar ${input}`, {}, (error, stdout, stderr) => {
+    exec(`java -DPLANTUML_LIMIT_SIZE=8192 -jar ${__dirname}\\..\\plantuml.jar ${input} -nometadata`, {}, (error, stdout, stderr) => {
       if (error || stderr) {
         console.error(error);
         console.error(stderr);
