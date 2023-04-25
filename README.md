@@ -48,9 +48,9 @@ See `tfpuml --help` for further options
       - Subnets
       - Gateways like IGWs, NATs, and others
   - EC2
+  - RDS
   - ECS (partial)
     - Cluster
-  - RDS (partial)
 
 # Limitations
 
@@ -62,7 +62,7 @@ To avoid cluttering the diagram, some AWS resources are intentionally left out, 
 
 - ECS Services & Tasks positioned at their subnets
 - Lambdas
-- Examples from `terraform-aws-modules`
+- More examples from `terraform-aws-modules`
 
 ## Acknowledgements
 

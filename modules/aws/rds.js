@@ -1,17 +1,10 @@
-import { nameSearch } from '../helpers.js';
+import { attrSearch, nameSearch } from '../helpers.js';
 
 export function loadRDS(state, stack, subnet_group, subnet_id, az) {
-  const records = state.resources.filter(
-    (r) =>
-      r.type === 'aws_db_instance' &&
-      r.instances[0].attributes.db_subnet_group_name === subnet_group &&
-      r.instances[0].attributes.availability_zone === az,
-  );
-
-  records.forEach((r, idx) => {
-    const att = r.instances[0].attributes;
+  const dbs = attrSearch(state, 'aws_db_instance', 'db_subnet_group_name', subnet_group).filter((db) => db.availability_zone === az);
+  dbs.forEach((db) => {
     let reference = 'AuroraAmazonRDSInstanceIMG';
-    switch (att.engine) {
+    switch (db.engine) {
       case 'postgres':
         reference = 'AuroraPostgreSQLInstanceIMG';
         break;
@@ -28,14 +21,12 @@ export function loadRDS(state, stack, subnet_group, subnet_id, az) {
         reference = 'AuroraMariaDBInstanceIMG';
         break;
     }
-    let title = nameSearch(att);
+    let title = nameSearch(db);
     stack.push({
       isGroup: false,
-      title: `${title}\\n${att.multi_az ? 'multi az' : 'single az'}\\n${att.engine}:${att.engine_version_actual}\\n${
-        att.instance_class
-      }`,
+      title: `${title}\\n${db.multi_az ? 'multi az' : 'single az'}\\n${db.engine}:${db.engine_version_actual}\\n${db.instance_class}`,
       reference,
-      id: `${subnet_id}_${r.instances[0].attributes.id}`,
+      id: `${subnet_id}_${db.id}`,
     });
   });
 }
