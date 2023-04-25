@@ -48,6 +48,7 @@ See `tfpuml --help` for further options
       - Subnets
       - Gateways like IGWs, NATs, and others
   - EC2
+    - On Demand, Spot
   - RDS
   - ECS (partial)
     - Cluster

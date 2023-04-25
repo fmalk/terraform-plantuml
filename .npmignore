@@ -1,0 +1,41 @@
+# node
+node_modules/**/*
+
+# Local .terraform directories and files
+*/**/.terraform/*
+*/**/.terraform/
+*/**/tfplan.out
+*/**/.tfstate
+*/**/.tfstate.*
+*/**/terraform.tfstate
+*/**/terraform.tfstate*
+terraform.tfstate2
+# local env vars
+*.tfvars
+# dont let lock.hck spill to TF Cloud, not needed there
+*.lock.hcl
+*.lock.info
+*/**/localstack_providers_override.tf
+# dont let local files interfere with TF Cloud
+*/**/*_local.tf
+
+# Crash log files
+**/crash.log
+
+# output files
+output.puml
+*.svg
+
+# Ignore other
+*.swp
+*/**/.idea
+.idea/*
+.idea
+.vscode/*
+.vscode
+plantuml.jar2
+.pluralith
+
+# NPM package can ignore examples
+examples/*
+gallery/*

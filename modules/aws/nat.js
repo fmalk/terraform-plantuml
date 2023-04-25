@@ -47,7 +47,7 @@ export function loadNAT(state, stack, subnet_id) {
         stack.push({
           from: a.subnet_id,
           to: nat.id,
-          arrow: '..[#5B9CD5]>',
+          arrow: '..[#5B9CD533]>',
         });
       });
     });

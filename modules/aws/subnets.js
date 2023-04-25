@@ -33,7 +33,7 @@ export function loadSubnets(state, stack, igws, vpc_id) {
           stack.push({
             from: s.id,
             to: igw,
-            arrow: '..[#1E8900]>',
+            arrow: '..[#1E890033]>',
           });
         });
       }
