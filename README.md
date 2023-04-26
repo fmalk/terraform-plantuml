@@ -49,6 +49,7 @@ See `tfpuml --help` for further options
       - Gateways like IGWs, NATs, and others
   - EC2
     - On Demand, Spot
+  - Lambdas
   - RDS
   - ECS (partial)
     - Cluster
@@ -62,7 +63,6 @@ To avoid cluttering the diagram, some AWS resources are intentionally left out, 
 # Roadmap
 
 - ECS Services & Tasks positioned at their subnets
-- Lambdas
 - More examples from `terraform-aws-modules`
 
 ## Acknowledgements
