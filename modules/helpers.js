@@ -45,12 +45,13 @@ export function attrSearch(state, type, attrName, attrValue) {
 /**
  * Detect name from an instance attributes
  *
- * @param {any} attributes}
+ * @param {any} attributes
  * @returns {string}
  */
 export function nameSearch(attributes) {
   let title = '' + attributes.id;
   if (attributes.name) title = attributes.name;
+  else if (attributes.function_name) title = attributes.function_name;
   else if (attributes.tags && attributes.tags.Name) title = attributes.tags.Name;
   return title;
 }

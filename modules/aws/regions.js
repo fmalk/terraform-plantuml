@@ -1,6 +1,7 @@
 import { loadVPC } from './vpc.js';
 import { loadCluster } from './ecs_cluster.js';
 import { loadCGW } from './cgw.js';
+import { loadLambdas } from './lambdas.js';
 
 export function loadRegions(state, stack) {
   const records = state.resources.map((r) => {
@@ -22,6 +23,7 @@ export function loadRegions(state, stack) {
       id: region,
     });
     loadCGW(state, stack, region);
+    loadLambdas(state, stack, region);
     loadCluster(state, stack, region);
     loadVPC(state, stack, region);
     if (idx > 0) {

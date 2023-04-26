@@ -1,5 +1,4 @@
 import { attrSearch, nameSearch } from '../helpers.js';
-import { loadEIP } from './eip.js';
 
 export function loadEC2(state, stack, subnet_id) {
   const records = attrSearch(state, 'aws_instance', 'subnet_id', subnet_id);

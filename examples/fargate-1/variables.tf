@@ -5,12 +5,12 @@ variable "aws_region" {
 
 variable "aws_account_id" {
   description = "AWS account ID"
-  default = "1234567"
+  default     = "1234567"
 }
 
 variable "az_count" {
   description = "Number of AZs to cover in a given AWS region"
-  type = number
+  type        = number
   default     = 2
 }
 

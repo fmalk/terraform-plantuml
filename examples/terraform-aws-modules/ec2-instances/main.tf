@@ -40,11 +40,11 @@ module "ec2_complete" {
 
   name = local.name
 
-  ami                         = local.ami_id
-  instance_type               = "c5.xlarge" # used to set core count below
-  availability_zone           = element(module.vpc.azs, 0)
-  subnet_id                   = element(module.vpc.private_subnets, 0)
-  vpc_security_group_ids      = [module.security_group.security_group_id]
+  ami                    = local.ami_id
+  instance_type          = "c5.xlarge" # used to set core count below
+  availability_zone      = element(module.vpc.azs, 0)
+  subnet_id              = element(module.vpc.private_subnets, 0)
+  vpc_security_group_ids = [module.security_group.security_group_id]
   # placement_group             = aws_placement_group.web.id
   associate_public_ip_address = true
   disable_api_stop            = false
@@ -98,7 +98,7 @@ module "ec2_network_interface" {
   source = "terraform-aws-modules/ec2-instance/aws"
 
   name = "${local.name}-network-interface"
-  ami = local.ami_id
+  ami  = local.ami_id
   network_interface = [
     {
       device_index          = 0

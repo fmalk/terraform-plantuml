@@ -29,10 +29,7 @@ export default async function runner(input, output, options) {
   if (check) {
     console.log(chalk.blue('CHECK ') + 'terraform file version');
     if (!satisfies(state.terraform_version, TF_VERSION_CHECK)) {
-      console.error(
-        chalk.red('ERROR') +
-          ` Terraform version must be ${TF_VERSION_CHECK}. Use the --no-check flag to override (and possible break parsing)`,
-      );
+      console.error(chalk.red('ERROR') + ` Terraform version must be ${TF_VERSION_CHECK}. Use the --no-check flag to override (and possible break parsing)`);
       process.exit(9);
     }
   } else {
@@ -50,21 +47,17 @@ export default async function runner(input, output, options) {
   console.timeEnd(chalk.magenta('STACK') + ' TF resources');
 
   // header
-  console.time(chalk.blue('WRITE') + ' header');
+  console.time(chalk.magenta('WRITE') + ' parsed resources');
   const headerPath = path.resolve(__dirname + '/../templates/header.puml');
   appendFileSync(output, readFileSync(headerPath));
-  console.timeEnd(chalk.blue('WRITE') + ' header');
 
   // parser
-  console.time(chalk.magenta('WRITE') + ' parsed resources');
   parse(stack);
-  console.timeEnd(chalk.magenta('WRITE') + ' parsed resources');
 
   // footer
-  console.time(chalk.blue('WRITE') + ' footer');
   const endPath = path.resolve(__dirname + '/../templates/end.puml');
   appendFileSync(output, readFileSync(endPath));
-  console.timeEnd(chalk.blue('WRITE') + ' footer');
+  console.timeEnd(chalk.magenta('WRITE') + ' parsed resources');
 
   // render image
   if (options.image) {

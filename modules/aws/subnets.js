@@ -2,6 +2,7 @@ import { loadRDS } from './rds.js';
 import { loadNAT } from './nat.js';
 import { loadEC2 } from './ec2.js';
 import { attrSearch, nameSearch } from '../helpers.js';
+import { loadVPCLambdas } from './lambdas.js';
 
 export function loadSubnets(state, stack, igws, vpc_id) {
   const subnets = attrSearch(state, 'aws_subnet', 'vpc_id', vpc_id);
@@ -38,9 +39,7 @@ export function loadSubnets(state, stack, igws, vpc_id) {
         });
       }
       // DATABASES
-      const sg_record = state.resources.filter(
-        (r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === s.id),
-      );
+      const sg_record = state.resources.filter((r) => r.type === 'aws_db_subnet_group' && r.instances[0].attributes.subnet_ids.some((sgid) => sgid === s.id));
       if (sg_record && sg_record.length > 0) {
         const subnet_group = sg_record[0].instances[0].attributes.name;
         loadRDS(state, stack, subnet_group, s.id, az);
@@ -51,6 +50,9 @@ export function loadSubnets(state, stack, igws, vpc_id) {
       // END NAT
       // EC2
       loadEC2(state, stack, s.id);
+      // VPC Lambdas
+      loadVPCLambdas(state, stack, vpc_id, s.id);
+      // END VPC Lambdas
       stack.push({
         endGroup: true, // end subnet
       });

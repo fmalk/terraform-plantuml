@@ -1,0 +1,1 @@
+{"filename": "builds\\79b89b7712036d451fdd185be961620dbfaa1f92c77207dce03e6277b3600797.zip", "runtime": "python3.8", "artifacts_dir": "builds", "build_plan": [["zip", "./fixtures/python3.8-app1", null]]}

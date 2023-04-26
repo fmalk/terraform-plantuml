@@ -1,10 +1,11 @@
 {
   "name": "tfpuml",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Generate PlantUML Images from a Terraform State file",
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "format": "prettier --write \"modules/**/*.js\" \"tests/**/*.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
