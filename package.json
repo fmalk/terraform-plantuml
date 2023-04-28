@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "remark": "remark . --output",
     "format": "prettier --write \"modules/**/*.js\" \"tests/**/*.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -30,6 +31,18 @@
     "semver": "^7.3.8"
   },
   "devDependencies": {
-    "prettier": "^2.8.3"
+    "prettier": "^2.8.3",
+    "remark-cli": "^11.0.0",
+    "remark-preset-lint-consistent": "^5.1.1",
+    "remark-preset-lint-recommended": "^6.1.2"
+  },
+  "remarkConfig": {
+    "settings": {
+      "bullet": "*"
+    },
+    "plugins": [
+      "remark-preset-lint-consistent",
+      "remark-preset-lint-recommended"
+    ]
   }
 }
