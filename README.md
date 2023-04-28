@@ -1,6 +1,7 @@
 # terraform-plantuml
 
-![GitHub](https://img.shields.io/github/license/fmalk/terraform-plantuml)
+![Version](https://img.shields.io/github/package-json/v/fmalk/terraform-plantuml)
+![License](https://img.shields.io/github/license/fmalk/terraform-plantuml)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/5131e9caa5f842d6ab440adfbb4ada30)](https://app.codacy.com/gh/fmalk/terraform-plantuml/dashboard?utm_source=gh\&utm_medium=referral\&utm_content=\&utm_campaign=Badge_grade)
 ![Depfu](https://img.shields.io/depfu/dependencies/github/fmalk/terraform-plantuml)
 
