@@ -1,6 +1,6 @@
 {
   "name": "tfpuml",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Generate PlantUML Images from a Terraform State file",
   "main": "index.js",
   "type": "module",
@@ -26,12 +26,12 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^5.2.0",
-    "commander": "^10.0.0",
-    "request": "^2.88.2",
-    "semver": "^7.3.8"
+    "commander": "^10.0.1",
+    "node-fetch": "^3.3.1",
+    "semver": "^7.5.0"
   },
   "devDependencies": {
-    "prettier": "^2.8.3",
+    "prettier": "^2.8.7",
     "remark-cli": "^11.0.0",
     "remark-preset-lint-consistent": "^5.1.1",
     "remark-preset-lint-recommended": "^6.1.2"
