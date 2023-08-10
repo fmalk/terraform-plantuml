@@ -31,7 +31,7 @@
     "semver": "^7.5.2"
   },
   "devDependencies": {
-    "prettier": "^2.8.7",
+    "prettier": "^3.0.1",
     "remark-cli": "^11.0.0",
     "remark-preset-lint-consistent": "^5.1.2",
     "remark-preset-lint-recommended": "^6.1.3"
