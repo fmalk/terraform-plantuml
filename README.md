@@ -1,3 +1,5 @@
+Archiving this project, since Generative AI made leaps generating such images (I use agents for this nowadays).
+
 # terraform-plantuml
 
 ![Version](https://img.shields.io/github/package-json/v/fmalk/terraform-plantuml)
